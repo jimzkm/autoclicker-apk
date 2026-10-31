@@ -25,22 +25,25 @@ jobs:
       with:
         packages: platform-tools,build-tools;34.0.0,platforms;android-34,cmdline-tools;latest
 
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-
-    - name: Build Release APK
+    - name: Install Gradle
       run: |
-        ./gradlew assembleRelease --no-daemon --stacktrace 2>&1 || true
-        echo "=== Build outputs ==="
-        find . -name "*.apk" -type f 2>/dev/null
-        ls -la app/build/outputs/apk/release/ 2>/dev/null || echo "No release APK found"
+        echo "Installing Gradle 8.10.2..."
+        curl -sL -o /tmp/gradle.zip https://services.gradle.org/gradle/8.10.2-bin.zip
+        cd /tmp && unzip -q gradle.zip
+        echo "/tmp/gradle-8.10.2/bin" >> "$GITHUB_PATH"
+        gradle --version
 
     - name: Build Debug APK
       run: |
-        ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 || true
+        gradle assembleDebug --no-daemon --stacktrace 2>&1
         echo "=== Debug build outputs ==="
         find . -name "*.apk" -type f 2>/dev/null
-        ls -la app/build/outputs/apk/debug/ 2>/dev/null || echo "No debug APK found"
+
+    - name: Build Release APK
+      run: |
+        gradle assembleRelease --no-daemon --stacktrace 2>&1
+        echo "=== Release build outputs ==="
+        find . -name "*.apk" -type f 2>/dev/null
 
     - name: List all artifacts
       run: |
