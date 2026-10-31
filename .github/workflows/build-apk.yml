@@ -98,7 +98,7 @@ jobs:
 
     - name: Upload APK (release)
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: app-release-apk
         path: app/build/outputs/apk/release/*.apk
@@ -106,7 +106,7 @@ jobs:
 
     - name: Upload APK (debug)
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: app-debug-apk
         path: app/build/outputs/apk/debug/*.apk
