@@ -6,13 +6,13 @@
         <item name="colorOnPrimary">@android:color/white</item>
         <item name="android:windowSplashScreenBackground">@color/md_theme_background</item>
         <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
-        <item name="android:postSplashScreenTheme">@style/Theme.AutoClicker.Main</item>
+        <item name="postSplashScreenTheme">@style/Theme.AutoClicker.Main</item>
     </style>
 
     <style name="Theme.AutoClicker.NoActionBar" parent="Theme.AutoClicker">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullScreen">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="Theme.AutoClicker.Main" parent="Theme.AutoClicker">
