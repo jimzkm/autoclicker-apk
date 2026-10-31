@@ -65,10 +65,23 @@ jobs:
         gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/build_debug.log
         EXIT_CODE=${PIPESTATUS[0]}
         if [ $EXIT_CODE -ne 0 ]; then
-          echo "::error::Gradle BUILD FAILED (exit code $EXIT_CODE). Key errors:"
-          grep -iE '(error|e:|exception|failed|caused by|could not|cannot)' /tmp/build_debug.log | head -20
-          echo "::error::=== Last 20 lines of build log ==="
-          tail -20 /tmp/build_debug.log
+          echo "::error::BUILD FAILED! Outputting error lines as annotations:"
+          grep -iE '(error|e:|exception|failed|caused by|could not|cannot|FAILURE)' /tmp/build_debug.log | head -30 | while IFS= read -r line; do
+            echo "::error::$line"
+          done
+          echo "::error::=== Last 25 lines of build log ==="
+          tail -25 /tmp/build_debug.log | while IFS= read -r line; do
+            echo "::error::$line"
+          done
+          # Push error log to a separate branch for detailed debugging
+          echo "=== Pushing error log to error-log branch ==="
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git checkout -B error-log
+          cp /tmp/build_debug.log build_error_debug.log
+          git add build_error_debug.log
+          git commit -m "Build error log from failed run" || true
+          git push origin error-log --force 2>&1 || echo "push failed but continuing"
           exit $EXIT_CODE
         fi
         echo "=== Debug build outputs ==="
