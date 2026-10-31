@@ -1,0 +1,20 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode {
+        preferSettings = true
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+include ':app'
+rootProject.name = "AutoClicker"
