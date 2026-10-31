@@ -2,9 +2,8 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/accessibility_service_description"
     android:accessibilityServiceType="accessibilityServiceTypeAll"
-    android:accessibilityFlags="flagDefault|flagIncludeNotImportantViews|flagDefaultTouch|flagRequestEnhancedAccessibilityService"
+    android:accessibilityFlags="flagDefault|flagIncludeNotImportantViews"
     android:eventsToHandle="typeAllMask"
     android:accessibilityEventTypes="typeAllMask"
-    android:canRetrieveWindowContent="true"
-    android:canRequestEnhancedAccessibilityService="true">
+    android:canRetrieveWindowContent="true">
 </accessibility-service>
