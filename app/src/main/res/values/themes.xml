@@ -4,9 +4,9 @@
     <style name="Theme.AutoClicker" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary_dark</item>
         <item name="colorOnPrimary">@android:color/white</item>
-        <item name="windowSplashScreenBackground">@color/md_theme_background</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
-        <item name="postSplashScreenTheme">@style/Theme.AutoClicker.Main</item>
+        <item name="android:windowSplashScreenBackground">@color/md_theme_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="android:postSplashScreenTheme">@style/Theme.AutoClicker.Main</item>
     </style>
 
     <style name="Theme.AutoClicker.NoActionBar" parent="Theme.AutoClicker">
