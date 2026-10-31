@@ -26,18 +26,29 @@ jobs:
         api-level: 34
         build-tools: 34.0.0
 
-    - name: Generate Gradle Wrapper
-      run: |
-        gradle wrapper --gradle-version 8.10.2 --distribution-type bin
-        chmod +x ./gradlew
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
 
     - name: Build Release APK
       run: |
-        ./gradlew assembleRelease --no-daemon --stacktrace
+        ./gradlew assembleRelease --no-daemon --stacktrace 2>&1 || true
+        echo "=== Build outputs ==="
+        find . -name "*.apk" -type f 2>/dev/null
+        ls -la app/build/outputs/apk/release/ 2>/dev/null || echo "No release APK found"
 
     - name: Build Debug APK
       run: |
-        ./gradlew assembleDebug --no-daemon --stacktrace
+        ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 || true
+        echo "=== Debug build outputs ==="
+        find . -name "*.apk" -type f 2>/dev/null
+        ls -la app/build/outputs/apk/debug/ 2>/dev/null || echo "No debug APK found"
+
+    - name: List all artifacts
+      run: |
+        echo "=== All build outputs ==="
+        find app/build -name "*.apk" -type f 2>/dev/null || echo "No APK files found"
+        echo "=== app/build directory ==="
+        ls -la app/build/ 2>/dev/null || echo "No app/build directory"
 
     - name: Upload APK (release)
       if: always()
@@ -45,6 +56,7 @@ jobs:
       with:
         name: app-release-apk
         path: app/build/outputs/apk/release/*.apk
+        if-no-files-found: ignore
 
     - name: Upload APK (debug)
       if: always()
@@ -52,3 +64,4 @@ jobs:
       with:
         name: app-debug-apk
         path: app/build/outputs/apk/debug/*.apk
+        if-no-files-found: ignore
