@@ -7,9 +7,6 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    repositoriesMode {
-        preferSettings = true
-    }
     repositories {
         google()
         mavenCentral()
