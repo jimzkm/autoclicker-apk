@@ -53,15 +53,39 @@ jobs:
         ls $ANDROID_HOME/build-tools/
         ls $ANDROID_HOME/platforms/
 
+    - name: Configure local.properties
+      run: |
+        echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
+        echo "Created local.properties"
+        cat local.properties
+
     - name: Build Debug APK
       run: |
-        gradle assembleDebug --no-daemon --stacktrace 2>&1
+        set +e
+        gradle assembleDebug --no-daemon --stacktrace --info 2>&1 | tee /tmp/build_debug.log
+        EXIT_CODE=${PIPESTATUS[0]}
+        if [ $EXIT_CODE -ne 0 ]; then
+          echo "::error::Gradle BUILD FAILED (exit code $EXIT_CODE). Key errors:"
+          grep -iE '(error|e:|exception|failed|caused by|could not|cannot)' /tmp/build_debug.log | head -20
+          echo "::error::=== Last 20 lines of build log ==="
+          tail -20 /tmp/build_debug.log
+          exit $EXIT_CODE
+        fi
         echo "=== Debug build outputs ==="
         find . -name "*.apk" -type f 2>/dev/null
 
     - name: Build Release APK
       run: |
-        gradle assembleRelease --no-daemon --stacktrace 2>&1
+        set +e
+        gradle assembleRelease --no-daemon --stacktrace --info 2>&1 | tee /tmp/build_release.log
+        EXIT_CODE=${PIPESTATUS[0]}
+        if [ $EXIT_CODE -ne 0 ]; then
+          echo "::error::Gradle RELEASE BUILD FAILED (exit code $EXIT_CODE). Key errors:"
+          grep -iE '(error|e:|exception|failed|caused by|could not|cannot)' /tmp/build_release.log | head -20
+          echo "::error::=== Last 20 lines of build log ==="
+          tail -20 /tmp/build_release.log
+          exit $EXIT_CODE
+        fi
         echo "=== Release build outputs ==="
         find . -name "*.apk" -type f 2>/dev/null
 
@@ -74,7 +98,7 @@ jobs:
 
     - name: Upload APK (release)
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v3
       with:
         name: app-release-apk
         path: app/build/outputs/apk/release/*.apk
@@ -82,7 +106,7 @@ jobs:
 
     - name: Upload APK (debug)
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v3
       with:
         name: app-debug-apk
         path: app/build/outputs/apk/debug/*.apk
