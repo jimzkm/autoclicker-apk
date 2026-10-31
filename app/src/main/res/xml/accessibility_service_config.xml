@@ -6,6 +6,5 @@
     android:eventsToHandle="typeAllMask"
     android:accessibilityEventTypes="typeAllMask"
     android:canRetrieveWindowContent="true"
-    android:canRequestEnhancedAccessibilityService="true"
-    android:canSkipEventStateConfirmation="true">
+    android:canRequestEnhancedAccessibilityService="true">
 </accessibility-service>
